@@ -50,7 +50,7 @@ func Show(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if offsetStr == "" {
-		limit = "0"
+		offset = "0"
 	}
 
 	query := fmt.Sprintf("SELECT * FROM todos LIMIT %s OFFSET %s", limit, offset)
@@ -83,7 +83,13 @@ func Show(w http.ResponseWriter, r *http.Request) {
 		todos = append(todos, todo)
 	}
 
-	json.NewEncoder(w).Encode(todos)
+	json, err := json.Marshal(todos)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	w.Write(json)
 }
 
 func Add(w http.ResponseWriter, r *http.Request) {}
